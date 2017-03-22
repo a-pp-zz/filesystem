@@ -21,17 +21,16 @@ class Filesystem {
 		}
 		else
 		{
-			$dir          = dirname ($filename);
+			$dir          = pathinfo ($filename, PATHINFO_DIRNAME);
 			$name         = pathinfo ($filename, PATHINFO_FILENAME);
 			$ext          = pathinfo ($filename, PATHINFO_EXTENSION);
 			$inc          = 0;
-			$new_filename = NULL;
 			
-			while (file_exists ( $new_filename)) :
-				$new_filename = $dir . DIRECTORY_SEPARATOR . $fname . $prefix . ++$inc . $suffix . '.' . $ext;	
+			while (file_exists ($filename)) :
+				$filename = $dir . DIRECTORY_SEPARATOR . $name . $prefix . ++$inc . $suffix . '.' . $ext;	
 			endwhile;
 			
-			return $new_filename;
+			return $filename;
 		}
 	}
 	
@@ -48,6 +47,21 @@ class Filesystem {
 		$path = $dir ? $dir . DIRECTORY_SEPARATOR : '';
 		return $path . $name . '.' . $ext;
 	}
+
+	/**
+	 * add prefix to file
+	 * @param string $filename
+	 * @param string $prefix
+	 * @return string
+	 */
+	public static function add_prefix ($filename, $prefix = '')
+	{
+		$name = pathinfo ($filename, PATHINFO_FILENAME);
+		$ext = pathinfo ($filename, PATHINFO_EXTENSION);
+		$dir  = pathinfo ($filename, PATHINFO_DIRNAME);
+		$path = $dir ? $dir . DIRECTORY_SEPARATOR : '';
+		return $path . $name . $prefix . '.' . $ext;
+	}	
 
 	/**
 	 * create_folder_by_date
