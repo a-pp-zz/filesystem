@@ -1,8 +1,7 @@
 {
     "name": "appzz/filesystem",
-    "description": "A safe way to get values from arrays",
+    "description": "Filesystem helpers",
     "type": "library",
-    "version": "1.0.0",
     "keywords": [
         "filesystem",
         "helpers"
@@ -12,7 +11,7 @@
     "authors": [
         {
             "name": "CoolSwitcher",
-            "email": "ds@appzz.tech",
+            "email": "ds@appzz.pw",
             "role": "lead"
         }
     ],
