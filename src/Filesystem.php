@@ -84,4 +84,62 @@ class Filesystem {
 
 		return file_exists ($dir) ? $dir : FALSE;
 	}
+
+	/**
+	 * Read dir, filter exts, assoc array
+	 * @param  string  $dir
+	 * @param  array   $extensions
+	 * @param  boolean $assoc
+	 * @return mixed
+	 */
+	public static function read_dir ($dir, $extensions = [], $assoc = false)
+	{
+		if ( ! is_dir ($dir)) {
+			return false;
+		}
+
+        $files = scandir ($dir);
+
+        if ( ! empty ($files)) {
+			sort ($files);
+
+	        if ( ! empty ($extensions)) {
+	        	$extensions = array_map (function ($v) {
+	        		return ltrim (mb_strtolower ($v), '.');
+	        	}, $extensions);
+	        }
+
+			$ret = [];
+
+			foreach ($files as $file) {
+
+				if (preg_match ('#^\..*#iu', $file)) {
+					continue;
+				}
+
+				$fullpath = rtrim ($dir) . DIRECTORY_SEPARATOR . $file;
+
+				if ( ! is_file ($fullpath)) {
+					continue;
+				}
+
+				$pi = pathinfo ($file);
+				$pi['extension'] = mb_strtolower ($pi['extension']);
+
+				if ( ! empty ($extensions) and ! in_array ($pi['extension'], $extensions)) {
+					continue;
+				}
+
+				if ($assoc) {
+					$ret[$pi['filename']] = $fullpath;
+				} else {
+					$ret[] = $fullpath;
+				}
+			}
+
+			return $ret;
+        }
+
+        return false;
+	}
 }
